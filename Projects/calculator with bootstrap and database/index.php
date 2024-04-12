@@ -1,0 +1,112 @@
+<?php
+    $server = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "calculator_db";
+
+    $con = new mysqli($server, $username, $password, $database);
+
+    if ($con->connect_error) {
+        die("Connection failed: " . $con->connect_error);
+    }
+
+    $stmt = $con->prepare("INSERT INTO calculator (questions, answers, dt) VALUES (?, ?, CURRENT_TIMESTAMP)");
+    $stmt->bind_param("ss", $questions, $answers);
+
+    $questions = $_POST['questions'] ?? '';
+    $answers = $_POST['answers'] ?? '';
+
+    if ($stmt->execute()) {
+        $insert = true;
+        echo "New record inserted successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $con->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="calculator-body">
+    <div class="modal popup" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title">Calculator</h1>
+                </div>
+                <div class="modal-body">
+                    <p>Dear math please grow up and solve your own problems, I'm tired of solving them for you.</p>
+                </div>
+                <div class="modal-footer close-btn">
+                    <p>Your Friend &ndash;</p><button type="button" class="btn btn-dark">Calculator</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+
+            <div class="col">
+                <div class="calculator">
+
+                <form action="index.php" method="post">
+                    <input id="result" name="questions" class="container  mr-1 ml-1 mb-2" type="text" placeholder="0" readonly>    
+                    <input id="result-output" name="answers" class="container mr-1 ml-1 mb-2" type="text" placeholder="0" readonly>
+                    <button class="btn2 btn-secondary col">Save</button>
+                </form>
+
+
+                    <div class="row">
+                        <button class="btn1 btn-secondary rounded-circle col" id="clear">AC</button>
+                        <button class="btn1 btn-secondary rounded-circle col">(</button>
+                        <button class="btn1 btn-secondary rounded-circle col">)</button>
+                        <button class="btn1 btn-secondary rounded-circle col">%</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn1 btn-dark rounded-circle col">7</button>
+                        <button class="btn1 btn-dark rounded-circle col">8</button>
+                        <button class="btn1 btn-dark rounded-circle col">9</button>
+                        <button class="btn1 btn-secondary rounded-circle col">/</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn1 btn-dark rounded-circle col">4</button>
+                        <button class="btn1 btn-dark rounded-circle col">5</button>
+                        <button class="btn1 btn-dark rounded-circle col">6</button>
+                        <button class="btn1 btn-secondary rounded-circle col">*</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn1 btn-dark rounded-circle col">1</button>
+                        <button class="btn1 btn-dark rounded-circle col">2</button>
+                        <button class="btn1 btn-dark rounded-circle col">3</button>
+                        <button class="btn1 btn-secondary rounded-circle col">-</button>
+                    </div>
+                    <div class="row">
+                        <button class="btn1 btn-secondary rounded-circle col">.</button>
+                        <button class="btn1 btn-dark rounded-circle col">0</button>
+                        <button class="btn1 btn-secondary rounded-circle col" id="equal">=</button>
+                        <button class="btn1 btn-secondary rounded-circle col">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
+
